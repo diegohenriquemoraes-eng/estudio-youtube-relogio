@@ -1,0 +1,11 @@
+name: Relogio
+# Repo público (minutos grátis): só chama o relógio do Estúdio YT. O log não mostra nada do conteúdo.
+on:
+  schedule: [{ cron: "*/15 * * * *" }]
+  workflow_dispatch:
+jobs:
+  tic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - run: curl -s -o /dev/null -w "%{http_code}\n" -m 90 "${{ secrets.RELOGIO_URL }}"
