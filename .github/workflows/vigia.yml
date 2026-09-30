@@ -1,18 +1,18 @@
 name: Vigia
 # Disparado quando um vídeo termina de subir: chama o relógio de 2 em 2 min até não haver vídeo esperando
-# (legenda, texto ou capa). Máximo de 3 h. O log só mostra números.
+# (legenda, texto ou capa). A legenda do YouTube às vezes leva horas: vigia até ~5h50 (teto do GitHub é 6h). O log só mostra números.
 on: workflow_dispatch
 concurrency: { group: vigia, cancel-in-progress: false }
 jobs:
   vigia:
     runs-on: ubuntu-latest
-    timeout-minutes: 185
+    timeout-minutes: 355
     steps:
       - run: |
-          for i in $(seq 1 90); do
+          for i in $(seq 1 115); do
             r=$(curl -s -m 90 "${{ secrets.RELOGIO_URL }}" || true)
             n=$(echo "$r" | sed -n 's/.*"esperando":\([0-9]*\).*/\1/p')
             echo "volta $i: esperando=${n:-?}"
             [ "$n" = "0" ] && exit 0
-            sleep 120
+            sleep 180
           done
